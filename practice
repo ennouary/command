@@ -1,0 +1,117 @@
+# 🧑‍💻 SysAdmin Daily Journey Using Commands
+
+This is how a System Administrator performs their duties—**hands-on with the command line**. The journey includes installing systems, managing users, configuring services, securing servers, automating tasks, and monitoring performance.
+
+---
+
+## 🧱 1. System Installation & Initialization
+
+```bash
+# Update and upgrade system packages
+sudo yum update -y    # For CentOS
+sudo apt update && sudo apt upgrade -y  # For Ubuntu
+
+# Set hostname
+sudo hostnamectl set-hostname server01.example.com
+
+# Set static IP (edit network file for CentOS)
+sudo vi /etc/sysconfig/network-scripts/ifcfg-ens33
+
+👥 2. User Management
+# Add new user
+sudo adduser devuser
+
+# Set password
+sudo passwd devuser
+
+# Add user to sudo group
+sudo usermod -aG wheel devuser  # CentOS
+sudo usermod -aG sudo devuser   # Ubuntu
+
+# Lock or unlock users
+sudo usermod -L username   # lock
+sudo usermod -U username   # unlock
+
+🔐 3. SSH and Security
+# Check SSH status
+sudo systemctl status sshd
+
+# Change default SSH port (optional)
+sudo vi /etc/ssh/sshd_config
+# Port 2222
+
+# Restart SSH
+sudo systemctl restart sshd
+
+# Enable firewall and allow SSH
+sudo systemctl enable firewalld
+sudo systemctl start firewalld
+sudo firewall-cmd --permanent --add-service=ssh
+sudo firewall-cmd --reload
+
+🕸️ 4. Install Web & Database Servers
+# Install Nginx
+sudo yum install -y epel-release
+sudo yum install -y nginx
+sudo systemctl enable nginx
+sudo systemctl start nginx
+
+# Install MySQL (MariaDB)
+sudo yum install -y mariadb-server
+sudo systemctl enable mariadb
+sudo systemctl start mariadb
+sudo mysql_secure_installation
+
+🧠 5. Monitoring & Logs
+# Check memory and CPU usage
+free -m
+top
+htop   # if installed
+
+# Check disk usage
+df -h
+du -sh /home/*
+
+# View logs
+journalctl -xe        # Critical system logs
+cat /var/log/messages # General logs
+
+⏰ 6. Cron Jobs & Automation
+# Edit crontab for current user
+crontab -e
+
+# Example: daily backup at 2 AM
+0 2 * * * /home/backup.sh
+
+# View cron logs
+cat /var/log/cron
+
+🛠️ 7. Troubleshooting
+# Restart a failed service
+sudo systemctl restart nginx
+
+# View failed services
+systemctl --failed
+
+# Test network
+ping 8.8.8.8
+traceroute google.com
+
+# Check open ports
+sudo netstat -tuln
+
+📦 8. Backup & Restore
+# Simple file backup
+tar -czvf backup-$(date +%F).tar.gz /var/www/html/
+
+# Copy to remote server
+scp backup.tar.gz user@192.168.1.100:/home/user/backups
+
+✅ 9. Final Daily Checklist
+uptime           # Check how long the system has been running
+df -h            # Disk space
+free -m          # Memory usage
+top              # CPU usage
+systemctl status # Service status
+journalctl -xe   # Logs
+
